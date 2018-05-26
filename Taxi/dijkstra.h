@@ -27,7 +27,7 @@ public:
     };
 
     static int complex_dijkstra(QMap<int, QMap<int, int> >& edges, int src,
-                                QVector<int>& dst, QVector<int>& path);
+                                QVector<int>& dst);
 };
 
 bool operator <(const Dijkstra::pq_ele& t1, const Dijkstra::pq_ele& t2);

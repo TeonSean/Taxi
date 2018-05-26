@@ -44,7 +44,7 @@ bool operator <(const Dijkstra::pq_ele& t1, const Dijkstra::pq_ele& t2)
     return t1.value >= t2.value;
 }
 
-int Dijkstra::complex_dijkstra(QMap<int, QMap<int, int> > &edges, int src, QVector<int> &dst, QVector<int> &path)
+int Dijkstra::complex_dijkstra(QMap<int, QMap<int, int> > &edges, int src, QVector<int> &dst)
 {
     QMap<int, int> min_dis;
     // init

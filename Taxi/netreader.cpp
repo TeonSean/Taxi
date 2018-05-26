@@ -114,6 +114,11 @@ QMap<int, QMap<int, int> >& NetReader::getEdges()
     return edges;
 }
 
+int NetReader::getTaxiCnt()
+{
+    return taxis.size();
+}
+
 QVector<int>& NetReader::getDst(int taxi)
 {
     return taxis[taxi]->dst;

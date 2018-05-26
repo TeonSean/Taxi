@@ -47,6 +47,8 @@ public:
 
     int getSrc(int taxi);
 
+    int getTaxiCnt();
+
 signals:
 
 public slots:

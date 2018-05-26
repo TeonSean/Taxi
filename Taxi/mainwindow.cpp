@@ -7,9 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    NetReader netreader;
-    QVector<int> path;
-    std::cout << Dijkstra::complex_dijkstra(netreader.getEdges(), netreader.getSrc(0), netreader.getDst(0), path) << std::endl;
 }
 
 MainWindow::~MainWindow()
