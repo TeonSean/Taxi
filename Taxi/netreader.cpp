@@ -139,6 +139,16 @@ int NetReader::getSrc(int taxi)
     return taxis[taxi]->pos;
 }
 
+int NetReader::getPassengerCnt(int taxi)
+{
+    return taxis[taxi]->dst.size();
+}
+
+int NetReader::getD1(int taxi)
+{
+    return taxis[taxi]->d1;
+}
+
 void NetReader::print(QString msg)
 {
     std::cout << msg.toStdString() << std::endl;

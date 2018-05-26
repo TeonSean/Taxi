@@ -51,6 +51,10 @@ public:
 
     int getTaxiCnt();
 
+    int getPassengerCnt(int taxi);
+
+    int getD1(int taxi);
+
 signals:
 
 public slots:

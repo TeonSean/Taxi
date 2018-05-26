@@ -8,9 +8,66 @@ Dijkstra::Dijkstra()
 
 }
 
-int Dijkstra::simple_dijkstra(QMap<int, QMap<int, int> > &edges, int src, int dst, QVector<int> &path)
+int Dijkstra::simple_dijkstra(QMap<int, QMap<int, int> > &edges, int src, int dst)
 {
-
+    QMap<int, int> min_dis;
+    // init
+    QMap<int, int>& src_edge = edges[src];
+    std::priority_queue<pq_ele> q;
+    for(auto e = src_edge.begin(); e != src_edge.end(); e++)
+    {
+        if(e.key() == dst)
+        {
+            return e.value();
+        }
+        min_dis[e.key()] = e.value();
+        q.push(pq_ele(e.key(), e.value()));
+    }
+    // loop
+    while(true)
+    {
+        int work, work_value;
+        while(true)
+        {
+            if(q.empty())
+            {
+                work = -1;
+                break;
+            }
+            work = q.top().state;
+            work_value = q.top().value;
+            q.pop();
+            if(work_value == min_dis[work])
+            {
+                break;
+            }
+        }
+        if(work == -1)
+        {
+            return -1;
+        }
+        QMap<int, int>& new_edge = edges[work];
+        for(auto e = new_edge.begin(); e != new_edge.end(); e++)
+        {
+            if(dst == e.key())
+            {
+                return work_value + e.value();
+            }
+            if(min_dis.count(e.key()))
+            {
+                if(work_value + e.value() < min_dis[e.key()])
+                {
+                    min_dis[e.key()] = work_value + e.value();
+                    q.push(pq_ele(e.key(), work_value + e.value()));
+                }
+            }
+            else
+            {
+                min_dis[e.key()] = work_value + e.value();
+                q.push(pq_ele(e.key(), work_value + e.value()));
+            }
+        }
+    }
 }
 
 int Dijkstra::next_state(int cur, int next, int base, QVector<int> &dst)
@@ -22,7 +79,6 @@ int Dijkstra::next_state(int cur, int next, int base, QVector<int> &dst)
         if(next == dst[i])
         {
             visit_state |= opt;
-            break;
         }
     }
     return next * base + visit_state;

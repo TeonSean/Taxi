@@ -10,8 +10,7 @@ class Dijkstra
 public:
     Dijkstra();
 
-    static int simple_dijkstra(QMap<int, QMap<int, int> >& edges, int src, int dst,
-                               QVector<int>& path);
+    static int simple_dijkstra(QMap<int, QMap<int, int> >& edges, int src, int dst);
 
     static int next_state(int cur, int next, int base, QVector<int>& dst);
 

@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <netreader.h>
-#include "dijkstra.h"
 
 namespace Ui {
 class MainWindow;
