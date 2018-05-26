@@ -25,10 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    netreader.cpp \
+    dijkstra.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    netreader.h \
+    dijkstra.h
 
 FORMS += \
         mainwindow.ui

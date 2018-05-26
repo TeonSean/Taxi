@@ -41,6 +41,12 @@ class NetReader : public QObject
 public:
     explicit NetReader(QObject *parent = nullptr);
 
+    QMap<int, QMap<int, int> >& getEdges();
+
+    QVector<int>& getDst(int taxi);
+
+    int getSrc(int taxi);
+
 signals:
 
 public slots:

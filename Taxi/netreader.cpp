@@ -88,11 +88,6 @@ void NetReader::readCarData()
             ss.str(buf);
             int id, cnt;
             ss >> id >> cnt;
-            if(cnt == 4)
-            {
-                taxis.push_back(NULL);
-                continue;
-            }
             char comma;
             int pos;
             float longitude, latitude;
@@ -112,6 +107,21 @@ void NetReader::readCarData()
     {
         print("Error reading cars.");
     }
+}
+
+QMap<int, QMap<int, int> >& NetReader::getEdges()
+{
+    return edges;
+}
+
+QVector<int>& NetReader::getDst(int taxi)
+{
+    return taxis[taxi]->dst;
+}
+
+int NetReader::getSrc(int taxi)
+{
+    return taxis[taxi]->pos;
 }
 
 void NetReader::print(QString msg)
