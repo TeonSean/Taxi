@@ -23,7 +23,7 @@ void calc_d1()
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    calc_d1();
+//    calc_d1();
     MainWindow w;
     w.show();
     return a.exec();

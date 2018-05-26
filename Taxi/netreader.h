@@ -21,8 +21,9 @@ public:
     int id;
     int pos;
     QVector<int> dst;
+    int d1;
 
-    Taxi(int id, int pos, QVector<int>& dst_);
+    Taxi(int id, int pos, int d1, QVector<int>& dst_);
 };
 
 class NetReader : public QObject
@@ -37,6 +38,7 @@ class NetReader : public QObject
     void readCarData();
     void readNodeData();
     void readEdgeData();
+    void readD1();
 
 public:
     explicit NetReader(QObject *parent = nullptr);

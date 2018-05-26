@@ -10,8 +10,8 @@ Node::Node(int id, float longitude, float latitude):
 
 }
 
-Taxi::Taxi(int id, int pos, QVector<int> &dst_):
-    id(id), pos(pos)
+Taxi::Taxi(int id, int pos, int d1, QVector<int> &dst_):
+    id(id), pos(pos), d1(d1)
 {
     for(auto i: dst_)
     {
@@ -78,18 +78,19 @@ void NetReader::readEdgeData()
 void NetReader::readCarData()
 {
     QFile carf("..\\data\\car.txt");
-    if(carf.open(QIODevice::ReadOnly))
+    QFile df("..\\data\\d1.txt");
+    if(carf.open(QIODevice::ReadOnly) && df.open(QIODevice::ReadOnly))
     {
-        char buf[256];
+        char buf[256], buf2[16];
         print("Reading car data.");
         std::stringstream ss;
-        while(carf.readLine(buf, sizeof(buf)) >= 0)
+        while(carf.readLine(buf, sizeof(buf)) >= 0 && df.readLine(buf2, sizeof(buf2)) >= 0)
         {
             ss.str(buf);
             int id, cnt;
             ss >> id >> cnt;
             char comma;
-            int pos;
+            int pos, d1;
             float longitude, latitude;
             ss >> longitude >> comma >> latitude >> comma >> pos;
             QVector<int> dst;
@@ -99,7 +100,16 @@ void NetReader::readCarData()
                 ss >> longitude >> comma >> latitude >> comma >> node;
                 dst.push_back(node);
             }
-            taxis.push_back(new Taxi(id, pos, dst));
+            if(cnt > 0)
+            {
+                ss.str(buf2);
+                ss >> d1;
+            }
+            else
+            {
+                d1 = 0;
+            }
+            taxis.push_back(new Taxi(id, pos, d1, dst));
         }
         print("Finished.");
     }
