@@ -2,33 +2,42 @@
 #define TAXISELECTOR_H
 
 #include <QObject>
-#include <QList>
+#include <QVector>
 #include "netreader.h"
 #include "dijkstra.h"
+#include <QThread>
 
 class SelectResult
 {
+
 public:
     int taxi;
-    int onboard_detour;
-    int pickup_detour;
+    int src;
+    int d1;
+    int d2;
+    int d3;
+    int d4;
 
-    SelectResult(int taxi, int onboard_detour, int pickup_detour);
+    SelectResult(int taxi, int src, int d1, int d2, int d3, int d4);
 };
 
-class TaxiSelector : public QObject
+class TaxiSelector : public QThread
 {
     Q_OBJECT
 
-    NetReader nr;
+    NetReader& nr;
     const int limit;
+    int src;
+    int dst;
 
 public:
-    explicit TaxiSelector(QObject *parent = nullptr);
+    explicit TaxiSelector(int src, int dst, QObject *parent = nullptr);
 
-    QList<SelectResult> select(int src, int dst);
+    void run();
 
 signals:
+    void finish(QVector<SelectResult*>*, int);
+    void message(QString msg);
 
 public slots:
 };

@@ -30,10 +30,13 @@ class NetReader : public QObject
 {
     Q_OBJECT
 
+    static NetReader* instance;
     QVector<Node*> nodes;
     QMap<int, QMap<int, int> > edges;
     QVector<Taxi*> taxis;
+    QVector<int> sortedTaxis;
 
+    explicit NetReader(QObject *parent = nullptr);
     void print(QString msg);
     void readCarData();
     void readNodeData();
@@ -41,11 +44,14 @@ class NetReader : public QObject
     void readD1();
 
 public:
-    explicit NetReader(QObject *parent = nullptr);
+
+    static NetReader& getInstance();
 
     QMap<int, QMap<int, int> >& getEdges();
 
     QVector<int>& getDst(int taxi);
+
+    int getNodeCnt();
 
     int getSrc(int taxi);
 
@@ -55,7 +61,13 @@ public:
 
     int getD1(int taxi);
 
+    int getTaxiIdx(int rank);
+
+    void init();
+
 signals:
+
+    void message(QString msg);
 
 public slots:
 };

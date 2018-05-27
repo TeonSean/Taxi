@@ -28,13 +28,16 @@ SOURCES += \
         mainwindow.cpp \
     netreader.cpp \
     dijkstra.cpp \
-    taxiselector.cpp
+    taxiselector.cpp \
+    input.cpp
 
 HEADERS += \
         mainwindow.h \
     netreader.h \
     dijkstra.h \
-    taxiselector.h
+    taxiselector.h \
+    input.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    input.ui

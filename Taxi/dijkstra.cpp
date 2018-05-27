@@ -8,6 +8,54 @@ Dijkstra::Dijkstra()
 
 }
 
+void Dijkstra::flood_dijkstra(QMap<int, QMap<int, int> > &edges, int src, QMap<int, int> &min_dis)
+{
+    // init
+    QMap<int, int>& src_edge = edges[src];
+    std::priority_queue<pq_ele> q;
+    for(auto e = src_edge.begin(); e != src_edge.end(); e++)
+    {
+        min_dis[e.key()] = e.value();
+        q.push(pq_ele(e.key(), e.value()));
+    }
+    // loop
+    while(true)
+    {
+        int work, work_value;
+        while(true)
+        {
+            if(q.empty())
+            {
+                return;
+            }
+            work = q.top().state;
+            work_value = q.top().value;
+            q.pop();
+            if(work_value == min_dis[work])
+            {
+                break;
+            }
+        }
+        QMap<int, int>& new_edge = edges[work];
+        for(auto e = new_edge.begin(); e != new_edge.end(); e++)
+        {
+            if(min_dis.count(e.key()))
+            {
+                if(work_value + e.value() < min_dis[e.key()])
+                {
+                    min_dis[e.key()] = work_value + e.value();
+                    q.push(pq_ele(e.key(), work_value + e.value()));
+                }
+            }
+            else
+            {
+                min_dis[e.key()] = work_value + e.value();
+                q.push(pq_ele(e.key(), work_value + e.value()));
+            }
+        }
+    }
+}
+
 int Dijkstra::simple_dijkstra(QMap<int, QMap<int, int> > &edges, int src, int dst)
 {
     QMap<int, int> min_dis;
@@ -79,6 +127,7 @@ int Dijkstra::next_state(int cur, int next, int base, QVector<int> &dst)
         if(next == dst[i])
         {
             visit_state |= opt;
+            break;
         }
     }
     return next * base + visit_state;
@@ -100,7 +149,7 @@ bool operator <(const Dijkstra::pq_ele& t1, const Dijkstra::pq_ele& t2)
     return t1.value >= t2.value;
 }
 
-int Dijkstra::complex_dijkstra(QMap<int, QMap<int, int> > &edges, int src, QVector<int> &dst)
+int Dijkstra::complex_dijkstra(QMap<int, QMap<int, int> > &edges, int src, QVector<int> &dst, int ub)
 {
     QMap<int, int> min_dis;
     // init
@@ -116,7 +165,7 @@ int Dijkstra::complex_dijkstra(QMap<int, QMap<int, int> > &edges, int src, QVect
         int next = next_state(src * base, e.key(), base, dst);
         if(check_state(next, base))
         {
-            return e.value();
+            return e.value() > ub ? -1 : e.value();
         }
         min_dis[next] = e.value();
         q.push(pq_ele(next, e.value()));
@@ -144,13 +193,18 @@ int Dijkstra::complex_dijkstra(QMap<int, QMap<int, int> > &edges, int src, QVect
         {
             return -1;
         }
+        if(work_value > ub)
+        {
+            return -1;
+        }
         QMap<int, int>& new_edge = edges[work / base];
         for(auto e = new_edge.begin(); e != new_edge.end(); e++)
         {
             int next = next_state(work, e.key(), base, dst);
             if(check_state(next, base))
             {
-                return work_value + e.value();
+                int re = work_value + e.value();
+                return re > ub ? -1 : re;
             }
             if(min_dis.count(next))
             {

@@ -2,10 +2,12 @@
 #include <QApplication>
 #include <QFile>
 #include <iostream>
+#include "dijkstra.h"
+#include "netreader.h"
 
 void calc_d1()
 {
-    NetReader netreader;
+    NetReader& netreader = NetReader::getInstance();
     int cnt = netreader.getTaxiCnt();
     QFile fout("..\\data\\d1.txt");
     fout.open(QIODevice::WriteOnly);

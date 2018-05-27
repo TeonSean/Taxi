@@ -19,11 +19,27 @@ Taxi::Taxi(int id, int pos, int d1, QVector<int> &dst_):
     }
 }
 
+NetReader* NetReader::instance = NULL;
+
 NetReader::NetReader(QObject *parent) : QObject(parent)
+{
+
+}
+
+void NetReader::init()
 {
     readNodeData();
     readEdgeData();
     readCarData();
+}
+
+NetReader& NetReader::getInstance()
+{
+    if(instance == NULL)
+    {
+        instance = new NetReader();
+    }
+    return *instance;
 }
 
 void NetReader::readNodeData()
@@ -110,8 +126,24 @@ void NetReader::readCarData()
                 d1 = 0;
             }
             taxis.push_back(new Taxi(id, pos, d1, dst));
+            sortedTaxis.push_back(id);
         }
         print("Finished.");
+        qSort(sortedTaxis.begin(), sortedTaxis.end(), [](const int t1, const int t2){
+            if(instance->taxis[t1]->dst.size() < instance->taxis[t2]->dst.size())
+            {
+                return true;
+            }
+            else if(instance->taxis[t1]->dst.size() > instance->taxis[t2]->dst.size())
+            {
+                return false;
+            }
+            if(instance->taxis[t1]->d1 < instance->taxis[t2]->d1)
+            {
+                return true;
+            }
+            return false;
+        });
     }
     else
     {
@@ -129,6 +161,11 @@ int NetReader::getTaxiCnt()
     return taxis.size();
 }
 
+int NetReader::getTaxiIdx(int rank)
+{
+    return sortedTaxis[rank];
+}
+
 QVector<int>& NetReader::getDst(int taxi)
 {
     return taxis[taxi]->dst;
@@ -137,6 +174,11 @@ QVector<int>& NetReader::getDst(int taxi)
 int NetReader::getSrc(int taxi)
 {
     return taxis[taxi]->pos;
+}
+
+int NetReader::getNodeCnt()
+{
+    return nodes.size();
 }
 
 int NetReader::getPassengerCnt(int taxi)
@@ -151,5 +193,5 @@ int NetReader::getD1(int taxi)
 
 void NetReader::print(QString msg)
 {
-    std::cout << msg.toStdString() << std::endl;
+    emit message(msg);
 }
